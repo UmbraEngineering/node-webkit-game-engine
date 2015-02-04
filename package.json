@@ -1,0 +1,26 @@
+{
+  "name": "node-webkit-game-engine",
+  "version": "0.0.0",
+  "description": "A game engine for making games that run in node-webkit",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/UmbraEngineering/node-webkit-game-engine"
+  },
+  "keywords": [
+    "node-webkit",
+    "game",
+    "keys",
+    "gamepad"
+  ],
+  "author": "James Brumond <james@jbrumond.me> (http://www.jbrumond.me)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UmbraEngineering/node-webkit-game-engine/issues"
+  },
+  "homepage": "https://github.com/UmbraEngineering/node-webkit-game-engine",
+  "dependencies": { }
+}
