@@ -1,4 +1,8 @@
 
+// 
+// GamePad API abstraction layer
+// 
+
 var GameObejct     = require('./game-object');
 var EventEmitter2  = require('eventemitter2').EventEmitter2;
 

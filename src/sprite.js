@@ -2,33 +2,6 @@
 var GameObject = require('./game-object');
 
 // 
-// The basic sprite class simply creates an <img /> element with a given src/width/height
-// 
-var Sprite = module.exports = GameObject.extend({
-
-	width: 32,
-	height: 32,
-	src: null,
-
-	init: function(elem) {
-		this._super();
-	},
-
-	draw: function() {
-		this.elem.innerHTML = this.render();
-	},
-	
-	render: function() {
-		return '<img src="' + this.src + '" width="' + this.width + '" height="' + this.height + '" />';
-	}
-
-});
-
-
-
-// -------------------------------------------------------------
-
-// 
 // The CSS sprite class creates a <div class="sprite" /> element that renders using your own
 // CSS, intended for use with CSS keyframes for complex animated sprites.
 // 
@@ -47,14 +20,48 @@ var Sprite = module.exports = GameObject.extend({
 //     100% { background-position: -64px; }
 //   }
 // 
-var CssSprite = Sprite.CSS = Sprite.extend({
+var Sprite = module.exports = GameObject.extend({
 
-	init: function() {
+	name: null,
+	state: null,
+	states: null,
+
+	init: function(scope) {
 		this._super();
+		this.state = { };
+		this.scope = scope;
+
+		if (typeof this.initialize === 'function') {
+			this.initialize();
+		}
+	},
+
+	draw: function() {
+		this.render();
+		this.scope.appendChild(this.elem);
 	},
 
 	render: function() {
-		return '<div class="sprite ' + this.name + '"></div>';
+		this.elem = document.createElement('div');
+		this.elem.classList.add('sprite', this.name);
+		
+		if (this.state) {
+			this.elem.classList.add(this.state);
+		}
+	},
+
+	setState: function(state, value) {
+		if (this.elem) {
+			// 
+		}
+	},
+
+	destroy: function() {
+		this.elem.innerHTML = '';
+		
+		for (var i in this) {
+			this[i] = null;
+		}
 	}
 
 });

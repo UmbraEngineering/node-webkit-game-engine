@@ -22,5 +22,10 @@
     "url": "https://github.com/UmbraEngineering/node-webkit-game-engine/issues"
   },
   "homepage": "https://github.com/UmbraEngineering/node-webkit-game-engine",
-  "dependencies": { }
+  "dependencies": {
+    "eventemitter2": "^0.4.14",
+    "keypress.js": "^2.1.0-1",
+    "merge-recursive": "0.0.3",
+    "promise-es6": "^0.1.0"
+  }
 }
