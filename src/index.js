@@ -7,9 +7,16 @@
 // -------------------------------------------------------------
 
 // 
+// Expose the DOM module
+// 
+exports.dom = require('./dom');
+
+// -------------------------------------------------------------
+
+// 
 // The canvas element, this is where the game is drawn
 // 
-exports.canvas = document.getElementsByTagName('main') || document.body;
+exports.canvas = exports.dom.findOne('main') || document.body;
 
 // -------------------------------------------------------------
 
@@ -45,14 +52,13 @@ exports.Model = require('./model');
 // Expose the Sprite classes, used for rendering individual sprites
 // 
 exports.Sprite = require('./sprite');
-exports.CssSprite = exports.Sprite.CSS;
 
 // -------------------------------------------------------------
 
 // 
-// Expose the keypress library for binding to keyboard events
+// Expose the keyboard module for keybinding and event listening
 // 
-exports.keypress = require('keypress.js');
+exports.keyboard = require('./keyboard');
 
 // -------------------------------------------------------------
 

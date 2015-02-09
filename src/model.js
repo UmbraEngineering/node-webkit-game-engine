@@ -1,5 +1,7 @@
 
 var core        = require('./index');
+var dom         = require('./dom');
+var loop        = require('./loop');
 var GameObject  = require('./game-object');
 var merge       = require('merge-recursive');
 
@@ -22,37 +24,68 @@ var Model = module.exports = GameObject.extend({
 		this._super();
 
 		// Create the options object
-		this.options = merge({ }, this.defaults, options);
+		this.options = merge({ }, this.defaults, options || { });
 
 		// Create the element that draws this object
-		this.elem = document.createElement(this.tagName);
-		this.elem.id = 'go-' + this.id;
+		this.elem = dom.create(this.tagName, {
+			id: 'go-' + this.id
+		});
 
-		// Create all the needed sprite instances
-		this._initSprites();
+		// Initialize the object's sprite
+		if (this.sprite) {
+			this.sprite = new this.sprite(this.elem);
+		}
+
+		// Initializes positioning getters/setters
+		this._initPositioning();
 
 		// Call the initialize method if one is defined
 		if (typeof this.initialize === 'function') {
 			this.initialize.apply(this, arguments);
 		}
+
+		// If there is a step method, start running it on loop steps
+		if (typeof this.step === 'function') {
+			this.step = this.step.bind(this);
+			loop.on('step', this.step);
+		}
 	},
 
 	// 
-	// Initialize sprite instances
+	// Initializes positioning for the object
 	// 
 	// @return void
 	// 
-	_initSprites: function() {
-		var self = this;
+	_initPositioning: function() {
+		dom.css.set(this.elem, {
+			position: 'absolute',
+			top: '0px',
+			left: '0px'
+		});
 
-		this._sprites = { };
-		this._currentSprite = null;
+		// Define the getter/setter for `x`
+		Object.defineProperty(this, 'x', {
+			get: function() {
+				return parseFloat(dom.css.get(this.elem, 'left'));
+			},
+			set: function(value) {
+				return dom.css.set(this.elem, {
+					left: value + 'px'
+				});
+			}
+		});
 
-		if (this.sprites) {
-			Object.keys(this.sprites).forEach(function(name) {
-				self._sprites[name] = new self.sprites[name](self.elem);
-			});
-		}
+		// Define the getter/setter for `y`
+		Object.defineProperty(this, 'y', {
+			get: function() {
+				return parseFloat(dom.css.get(this.elem, 'top'));
+			},
+			set: function(value) {
+				return dom.css.set(this.elem, {
+					top: value + 'px'
+				});
+			}
+		});
 	},
 
 // -------------------------------------------------------------
@@ -73,20 +106,10 @@ var Model = module.exports = GameObject.extend({
 	// @return void
 	// 
 	render: function() {
-		this.scope.appendChild(this.elem);
-	},
-
-	// 
-	// Renders the given sprite to the element
-	// 
-	// @param {name} the sprite name
-	// @return void
-	// 
-	setSprite: function(name) {
-		if (this._currentSprite !== name) {
-			this._currentSprite = name;
-			this._sprites[name].render();
+		if (this.sprite) {
+			this.sprite.draw();
 		}
+		this.options.scope.appendChild(this.elem);
 	},
 
 // -------------------------------------------------------------
@@ -102,6 +125,10 @@ var Model = module.exports = GameObject.extend({
 
 		if (typeof this.teardown === 'function') {
 			this.teardown();
+		}
+
+		if (typeof this.step === 'function') {
+			loop.removeListener('step', this.step);
 		}
 
 		Object.keys(this._sprites).forEach(function(name) {

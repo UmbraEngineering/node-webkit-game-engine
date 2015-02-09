@@ -3,7 +3,7 @@
 // GamePad API abstraction layer
 // 
 
-var GameObejct     = require('./game-object');
+var GameObject     = require('./game-object');
 var EventEmitter2  = require('eventemitter2').EventEmitter2;
 
 exports = module.exports = new EventEmitter2({
