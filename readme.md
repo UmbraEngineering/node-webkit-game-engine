@@ -17,10 +17,10 @@ A JavaScript game engine for use in making HTML/JavaScript games that compile to
 
 * Physics
     - better move functions
-    - acceleration
+    - ~~acceleration~~
     - friction
-    - gravity
-    - collision detection
-    - inertia
+    - ~~gravity~~ _(untested)_
+    - ~~collision detection~~ _(untested)_
+    - ~~inertia~~
 * Handling of fps drop 
 * Better input testing (for multiple options) / input configuration

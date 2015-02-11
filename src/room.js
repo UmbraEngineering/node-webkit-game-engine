@@ -25,6 +25,16 @@ var Room = module.exports = GameObject.extend({
 
 			return obj;
 		});
+	},
+
+	destroy: function() {
+		this.objects.forEach(function(obj) {
+			if (obj.destroy) {
+				obj.destroy();
+			}
+		});
+
+		this._super();
 	}
 
 });

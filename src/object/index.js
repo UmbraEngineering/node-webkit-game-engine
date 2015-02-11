@@ -1,17 +1,23 @@
 
-var core        = require('./index');
-var dom         = require('./dom');
-var loop        = require('./loop');
-var conf        = require('./config');
-var GameObject  = require('./game-object');
-var merge       = require('merge-recursive');
+var core          = require('../index');
+var dom           = require('../dom');
+var loop          = require('../loop');
+var conf          = require('../config');
+var GameObject    = require('../game-object');
+var merge         = require('merge-recursive');
 
 // 
 // Define the custom object element
 // 
 dom.register(conf.elems.object, null, {
-	display: 'block'
+	display: 'block',
+	userSelect: 'none'
 });
+
+// 
+// A list of all currently existing object instances
+// 
+var instances = [ ];
 
 // 
 // Define the "object" type
@@ -33,6 +39,8 @@ var Obj = module.exports = GameObject.extend({
 	// 
 	init: function(options) {
 		this._super();
+
+		instances.push(this);
 
 		// Create the options object
 		this.options = merge({ }, this.defaults, options || { });
@@ -62,9 +70,6 @@ var Obj = module.exports = GameObject.extend({
 			this.sprite = new this.sprite(this.elem);
 		}
 
-		// Initializes positioning getters/setters
-		this._initPositioning();
-
 		// Call the initialize method if one is defined
 		if (typeof this.initialize === 'function') {
 			this.initialize.apply(this, arguments);
@@ -78,40 +83,16 @@ var Obj = module.exports = GameObject.extend({
 	},
 
 	// 
-	// Initializes positioning for the object
+	// Initializes a compliant object mixin
 	// 
+	// @param {name} the mixin to initialize
 	// @return void
 	// 
-	_initPositioning: function() {
-		dom.css.set(this.elem, {
-			position: 'absolute',
-			top: '0px',
-			left: '0px'
-		});
+	use: function(name) {
+		// Convert to a method name (eg. "physics" => "_initPhysics")
+		name = '_init' + name[0].toUpperCase() + name.slice(1);
 
-		// Define the getter/setter for `x`
-		Object.defineProperty(this, 'x', {
-			get: function() {
-				return parseFloat(dom.css.get(this.elem, 'left'));
-			},
-			set: function(value) {
-				return dom.css.set(this.elem, {
-					left: value + 'px'
-				});
-			}
-		});
-
-		// Define the getter/setter for `y`
-		Object.defineProperty(this, 'y', {
-			get: function() {
-				return parseFloat(dom.css.get(this.elem, 'top'));
-			},
-			set: function(value) {
-				return dom.css.set(this.elem, {
-					top: value + 'px'
-				});
-			}
-		});
+		this[name]();
 	},
 
 // -------------------------------------------------------------
@@ -141,20 +122,6 @@ var Obj = module.exports = GameObject.extend({
 // -------------------------------------------------------------
 	
 	// 
-	// Moves the object in the given direction
-	// 
-	// @param {x} x distance to move
-	// @param {y} y distance to move
-	// @return void
-	// 
-	move: function(x, y) {
-		this.x += x;
-		this.y += y;
-	},
-
-// -------------------------------------------------------------
-	
-	// 
 	// Destroy the object, removing it from the DOM and preparing the
 	// whole thing for garbage collection
 	// 
@@ -163,8 +130,11 @@ var Obj = module.exports = GameObject.extend({
 	destroy: function() {
 		var self = this;
 
-		if (typeof this.teardown === 'function') {
-			this.teardown();
+		for (var i = 0, c = instances.length; i < c; i++) {
+			if (instances.id === this.id) {
+				instances.splice(i--, 1);
+				break;
+			}
 		}
 
 		if (typeof this.step === 'function') {
@@ -182,9 +152,14 @@ var Obj = module.exports = GameObject.extend({
 			this.elem.parentNode.removeChild(this.elem);
 		}
 
-		for (var i in this) {
-			this[i] = null;
-		}
+		this._super();
 	}
 
 });
+
+// -------------------------------------------------------------
+
+// 
+// Expose the instance list
+// 
+Obj.instances = instances;

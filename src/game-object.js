@@ -18,6 +18,18 @@ var GameObject = module.exports = Class.extend(EventEmitter2, {
 			enumerable: true,
 			configurable: false
 		});
+	},
+
+	destroy: function() {
+		if (typeof this.teardown === 'function') {
+			this.teardown();
+		}
+
+		this.emit('destroy');
+
+		for (var i in this) {
+			this[i] = null;
+		}
 	}
 
 });

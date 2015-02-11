@@ -2,6 +2,7 @@
 var GameObject = require('./game-object');
 
 exports = module.exports = new GameObject();
+exports.frameDelta = 0;
 
 var start;
 var lastFrame;
@@ -47,9 +48,12 @@ function createStepObject(timestamp) {
 	}
 
 	// Calculate approx fps
-	var delta = (timestamp - lastFrame) / 1000;
+	exports.frameDelta = (timestamp - lastFrame);
 	lastFrame = timestamp;
-	prevFpsValues.push(1 / delta);
+
+	var delta = exports.frameDelta / 1000;
+	prevFpsValues.push(1 / exports.frameDelta);
+	
 	if (prevFpsValues.length > 5) {
 		prevFpsValues.shift();
 	}
@@ -58,7 +62,8 @@ function createStepObject(timestamp) {
 	return {
 		timestamp: timestamp,
 		running: timestamp - start,
-		fps: average(prevFpsValues)
+		fps: average(prevFpsValues),
+		delta: exports.frameDelta
 	};
 }
 
@@ -69,7 +74,8 @@ function createStepObject(timestamp) {
 // @return number
 // 
 function average(arr) {
-	return arr.reduce(function(memo, value) {
-		return memo + value;
-	}, 0) / arr.length;
+	var sum = arr.reduce(function(a, b) {
+		return a + b;
+	});
+	return sum / arr.length;
 }

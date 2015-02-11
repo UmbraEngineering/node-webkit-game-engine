@@ -49,6 +49,20 @@ exports.Object = require('./object');
 // -------------------------------------------------------------
 
 // 
+// Expose the Physics mixin, used for applying physics calculations to objects
+// 
+exports.Physics = require('./object/physics');
+
+// -------------------------------------------------------------
+
+// 
+// Expose the Positioning mixin, used for applying positioning to objects
+// 
+exports.Positioning = require('./object/positioning');
+
+// -------------------------------------------------------------
+
+// 
 // Expose the Sprite classes, used for rendering individual sprites
 // 
 exports.Sprite = require('./sprite');
@@ -65,14 +79,14 @@ exports.Room = require('./room');
 // 
 // Expose the keyboard module for keybinding and event listening
 // 
-exports.keyboard = require('./keyboard');
+exports.keyboard = require('./input/keyboard');
 
 // -------------------------------------------------------------
 
 // 
 // Expose the abstracted GamePads API
 // 
-exports.gamepads = require('./gamepads');
+exports.gamepads = require('./input/gamepads');
 
 // -------------------------------------------------------------
 

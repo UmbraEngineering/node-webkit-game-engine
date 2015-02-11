@@ -1,7 +1,7 @@
 
-var keyboard    = require('./keyboard');
-var gamepads    = require('./gamepads');
-var GameObject  = require('./game-object');
+var keyboard    = require('../keyboard');
+var gamepads    = require('../gamepads');
+var GameObject  = require('../game-object');
 
 var inputs = { };
 

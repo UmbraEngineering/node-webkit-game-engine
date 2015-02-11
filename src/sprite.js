@@ -8,7 +8,8 @@ var merge       = require('merge-recursive');
 // Define the custom sprite element
 // 
 dom.register(conf.elems.sprite, null, {
-	display: 'block'
+	display: 'block',
+	userSelect: 'none'
 });
 
 // 
@@ -95,9 +96,7 @@ var Sprite = module.exports = GameObject.extend({
 	destroy: function() {
 		this.elem.innerHTML = '';
 		
-		for (var i in this) {
-			this[i] = null;
-		}
+		this._super();
 	}
 
 });
