@@ -52,7 +52,7 @@ function createStepObject(timestamp) {
 	lastFrame = timestamp;
 
 	var delta = exports.frameDelta / 1000;
-	prevFpsValues.push(1 / exports.frameDelta);
+	prevFpsValues.push(1 / delta);
 	
 	if (prevFpsValues.length > 5) {
 		prevFpsValues.shift();
