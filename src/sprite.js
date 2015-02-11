@@ -1,6 +1,15 @@
 
+var dom         = require('./dom');
+var conf        = require('./config');
 var GameObject  = require('./game-object');
 var merge       = require('merge-recursive');
+
+// 
+// Define the custom sprite element
+// 
+dom.register(conf.elems.sprite, null, {
+	display: 'block'
+});
 
 // 
 // The CSS sprite class creates a <div class="sprite" /> element that renders using your own
@@ -33,6 +42,19 @@ var Sprite = module.exports = GameObject.extend({
 		this.scope = scope;
 		this.state = merge({ }, this.state || { });
 
+		// The `define` method, if given, is run once, the first time this sprite is ever used. It
+		// is useful for bootstrapping code, like image preloading (if not done in css) or defining
+		// extra rules
+		if (typeof this.define === 'function' && ! Sprite.__defined) {
+			Object.defineProperty(Sprite, '__defined', {
+				value: true,
+				writeable: false,
+				configurable: false,
+				enumerable: false
+			});
+			this.define();
+		}
+
 		if (typeof this.initialize === 'function') {
 			this.initialize();
 		}
@@ -44,7 +66,7 @@ var Sprite = module.exports = GameObject.extend({
 	},
 
 	render: function() {
-		this.elem = document.createElement('div');
+		this.elem = document.createElement(conf.elems.sprite);
 		this.elem.classList.add('sprite', this.name);
 		
 		var elem = this.elem;

@@ -2,12 +2,23 @@
 var core        = require('./index');
 var dom         = require('./dom');
 var loop        = require('./loop');
+var conf        = require('./config');
 var GameObject  = require('./game-object');
 var merge       = require('merge-recursive');
 
-var Model = module.exports = GameObject.extend({
+// 
+// Define the custom object element
+// 
+dom.register(conf.elems.object, null, {
+	display: 'block'
+});
 
-	tagName: 'div',
+// 
+// Define the "object" type
+// 
+var Obj = module.exports = GameObject.extend({
+
+	name: 'object',
 
 	// 
 	// Default options for new instances
@@ -26,9 +37,24 @@ var Model = module.exports = GameObject.extend({
 		// Create the options object
 		this.options = merge({ }, this.defaults, options || { });
 
+		// The `define` method, if given, is run once, the first time this sprite is ever used. It
+		// is useful for bootstrapping code, like image preloading (if not done in css) or defining
+		// extra rules
+		if (typeof this.define === 'function' && ! Obj.__defined) {
+			Object.defineProperty(Obj, '__defined', {
+				value: true,
+				writeable: false,
+				configurable: false,
+				enumerable: false
+			});
+			this.define();
+		}
+
 		// Create the element that draws this object
-		this.elem = dom.create(this.tagName, {
-			id: 'go-' + this.id
+		this.elem = dom.create(conf.elems.object, {
+			id: 'ge-' + this.id,
+			name: this.name,
+			class: this.name
 		});
 
 		// Initialize the object's sprite
@@ -110,6 +136,20 @@ var Model = module.exports = GameObject.extend({
 			this.sprite.draw();
 		}
 		this.options.scope.appendChild(this.elem);
+	},
+
+// -------------------------------------------------------------
+	
+	// 
+	// Moves the object in the given direction
+	// 
+	// @param {x} x distance to move
+	// @param {y} y distance to move
+	// @return void
+	// 
+	move: function(x, y) {
+		this.x += x;
+		this.y += y;
 	},
 
 // -------------------------------------------------------------

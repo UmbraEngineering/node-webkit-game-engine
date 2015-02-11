@@ -72,12 +72,3 @@ exports.sequenceCombo = function(combo, func) {
 exports.unregisterCombo = function(combo) {
 	return listener.unregister_combo(combo);
 };
-
-// -------------------------------------------------------------
-
-// 
-// Key codes
-// 
-var KEYS = exports.KEYS = {
-	// 
-};

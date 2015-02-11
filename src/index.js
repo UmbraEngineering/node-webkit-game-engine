@@ -42,9 +42,9 @@ exports.Promise = require('./promise');
 // -------------------------------------------------------------
 
 // 
-// Expose the Model class, used for making in-game objects (like players, enemies, walls, etc.)
+// Expose the Object class, used for making in-game objects (like players, enemies, walls, etc.)
 // 
-exports.Model = require('./model');
+exports.Object = require('./object');
 
 // -------------------------------------------------------------
 
@@ -52,6 +52,13 @@ exports.Model = require('./model');
 // Expose the Sprite classes, used for rendering individual sprites
 // 
 exports.Sprite = require('./sprite');
+
+// -------------------------------------------------------------
+
+// 
+// Expose the room class, used for building game rooms
+// 
+exports.Room = require('./room');
 
 // -------------------------------------------------------------
 
