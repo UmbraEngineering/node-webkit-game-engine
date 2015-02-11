@@ -16,9 +16,18 @@ var instances = [ ];
 // Note: The PhysicsEntity mixin will assume that the Positioning mixin is already active
 // 
 // options:
-// 
+//   type: "dynamic" or "kinematic"
+//     "dynamic": affected by all physics (gravity, acceleration, etc)
+//     "kinematic": not affected by gravity
+//   collision: "none", "displace", or "elastic"
+//     "displace": moves the object out of the collided space and zeros out velocity in that direction
+//     "elastic": moves the object out of the collided space and "bounces" the object back the other way
+//   restitusion: the "bouncyness" of an elastic collidee
 // 
 var PhysicsEntity = module.exports = GameObject.extend({
+
+	maxVX: 1,
+	maxVY: 1,
 
 	init: function(object, options) {
 		this._super();
@@ -28,13 +37,9 @@ var PhysicsEntity = module.exports = GameObject.extend({
 		options = options || { };
 
 		// Define the object type as either "dynamic" or "kinematic"
-		//   "dynamic": affected by all physics (gravity, acceleration, etc)
-		//   "kinematic": not affected by gravity
 		this.type = options.type || 'dynamic';
 
 		// Define the collision handling as either "displace" or "elastic"
-		//   "displace": moves the object out of the collided space and zeros out velocity in that direction
-		//   "elastic": moves the object out of the collided space and "bounces" the object back the other way
 		this.collisionType = options.collision || 'displace';
 		Collision[this.collisionType].call(this, options);
 
@@ -64,7 +69,7 @@ var PhysicsEntity = module.exports = GameObject.extend({
 	updateBounds: function() {
 		this.x = this.object.x;
 		this.y = this.object.y;
-		
+
 		this.width = this.object.width();
 		this.height = this.object.height();
 
@@ -94,6 +99,9 @@ var PhysicsEntity = module.exports = GameObject.extend({
 
 		this.vx += this.ax * delta + gx;
 		this.vy += this.ay * delta + gy;
+
+		this.enforceMaxVelocity();
+
 		this.x  += this.vx * delta;
 		this.y  += this.vy * delta;
 
@@ -101,6 +109,29 @@ var PhysicsEntity = module.exports = GameObject.extend({
 		collisions.forEach(function() {
 			collision.resolve();
 		});
+	},
+
+	// 
+	// Make sure the object's velocity does not exceed it's max
+	// 
+	// @return void
+	// 
+	enforceMaxVelocity: function() {
+		if (this.vx > this.maxVX) {
+			this.vx = this.maxVX;
+		}
+
+		if (this.vx < -this.maxVX) {
+			this.vx = -this.maxVX;
+		}
+
+		if (this.vy > this.maxVY) {
+			this.vy = this.maxVY;
+		}
+
+		if (this.vy < -this.maxVY) {
+			this.vy = -this.maxVY;
+		}
 	},
 	
 	// 

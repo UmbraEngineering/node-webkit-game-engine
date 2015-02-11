@@ -19,3 +19,25 @@ exports._initPhysics = function() {
 		entity.destroy();
 	});
 };
+
+// 
+// Accelerate horizontally
+// 
+// @param {accel} the new acceleration to apply
+// @param {maxVelocity} the velocity at which to stop accelerating
+// @return void
+// 
+exports.accelerateX = function(accel) {
+	this.physics.ax = accel;
+};
+
+// 
+// Accelerate vertically
+// 
+// @param {accel} the new acceleration to apply
+// @param {maxVelocity} the velocity at which to stop accelerating
+// @return void
+// 
+exports.accelerateY = function(accel) {
+	this.physics.ax = accel;
+};
