@@ -13,12 +13,12 @@ A JavaScript game engine for use in making HTML/JavaScript games that compile to
 * DOM utils
 * Base rooms
 * Physics
-    - ~~better move functions~~
-    - ~~acceleration~~
-    - ~~friction~~
-    - ~~gravity~~
-    - ~~collision detection~~
-    - ~~inertia~~
+    - better move functions
+    - acceleration
+    - friction
+    - gravity
+    - collision detection
+    - inertia
 
 ## TODO
 
