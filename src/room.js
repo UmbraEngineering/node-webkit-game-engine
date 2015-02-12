@@ -9,6 +9,10 @@ var Room = module.exports = GameObject.extend({
 	init: function() {
 		this._super();
 
+		if (Array.isArray(this.objects)) {
+			this.objects = this.objects.slice();
+		}
+
 		// Call any defined initialize method
 		if (typeof this.initialize === 'function') {
 			this.initialize.apply(this);

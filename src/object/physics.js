@@ -2,18 +2,12 @@
 var PhysicsEntity = require('./physics-entity');
 
 // 
-// Gravity accelerations
-// 
-exports.gravityX = 0;
-exports.gravityY = 0;
-
-// 
 // Initializes the physics handling for an individual object `this`
 // 
 // @return void
 // 
 exports._initPhysics = function() {
-	var entity = this.physics = new PhysicsEntity(this);
+	var entity = this.physics = new PhysicsEntity(this, this.physics);
 
 	this.on('destroy', function() {
 		entity.destroy();
@@ -39,5 +33,25 @@ exports.accelerateX = function(accel) {
 // @return void
 // 
 exports.accelerateY = function(accel) {
-	this.physics.ax = accel;
+	this.physics.ay = accel;
+};
+
+// 
+// Define the horizontal gravity influence on this object
+// 
+// @param {value} x axis gravity
+// @return void
+// 
+exports.setGravityX = function(value) {
+	this.physics.gravityX = value;
+};
+
+// 
+// Define the vertical gravity influence on this object
+// 
+// @param {value} y axis gravity
+// @return void
+// 
+exports.setGravityY = function(value) {
+	this.physics.gravityY = value;
 };

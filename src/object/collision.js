@@ -111,6 +111,16 @@ var Collision = Class.extend({
 			// Stop the velocity
 			this.collider.dy = 0;
 		}
+
+		// If the collidee has friction, slow down the collider in all directions
+		if (this.collidee.friction) {
+			var friction = 1 - this.collidee.friction;
+
+			this.collider.ax *= friction;
+			this.collider.ay *= friction;
+			this.collider.vx *= friction;
+			this.collider.vy *= friction;
+		}
 	},
 
 	// 
@@ -142,6 +152,16 @@ var Collision = Class.extend({
 
 			// Reduce/reflect the velocity
 			this.reflect('dy');
+		}
+
+		// If the collidee has friction, slow down the collider in all directions
+		if (this.collidee.friction) {
+			var friction = 1 - this.collidee.friction;
+
+			this.collider.ax *= friction;
+			this.collider.ay *= friction;
+			this.collider.vx *= friction;
+			this.collider.vy *= friction;
 		}
 	},
 

@@ -29,6 +29,9 @@ var PhysicsEntity = module.exports = GameObject.extend({
 	maxVX: 1,
 	maxVY: 1,
 
+	gravityX: 0,
+	gravityY: 0,
+
 	init: function(object, options) {
 		this._super();
 
@@ -93,8 +96,8 @@ var PhysicsEntity = module.exports = GameObject.extend({
 
 		// Apply gravity if needed
 		if (this.type === 'dynamic') {
-			gx = this.object.gravityX * delta;
-			gy = this.object.gravityY * delta;
+			gx = this.gravityX * delta;
+			gy = this.gravityY * delta;
 		}
 
 		this.vx += this.ax * delta + gx;
@@ -102,11 +105,11 @@ var PhysicsEntity = module.exports = GameObject.extend({
 
 		this.enforceMaxVelocity();
 
-		this.x  += this.vx * delta;
-		this.y  += this.vy * delta;
+		this.x += this.vx * delta;
+		this.y += this.vy * delta;
 
 		var collisions = this.detectCollisions();
-		collisions.forEach(function() {
+		collisions.forEach(function(collision) {
 			collision.resolve();
 		});
 	},
@@ -222,6 +225,8 @@ var PhysicsEntity = module.exports = GameObject.extend({
 			}
 		});
 
+		this.collisions = collisions;
+
 		return collisions;
 	},
 	
@@ -264,10 +269,11 @@ var Collision = {
 	none: function() {
 		// pass
 	},
-	displace: function() {
-		// pass
+	displace: function(options) {
+		this.friction = options.friction || 0;
 	},
 	elastic: function(options) {
+		this.friction = options.friction || 0;
 		this.restitution = options.restitution || 0.2;
 	}
 };

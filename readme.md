@@ -12,15 +12,15 @@ A JavaScript game engine for use in making HTML/JavaScript games that compile to
 * Game loop
 * DOM utils
 * Base rooms
+* Physics
+    - ~~better move functions~~
+    - ~~acceleration~~
+    - ~~friction~~
+    - ~~gravity~~
+    - ~~collision detection~~
+    - ~~inertia~~
 
 ## TODO
 
-* Physics
-    - better move functions
-    - ~~acceleration~~
-    - friction
-    - ~~gravity~~ _(untested)_
-    - ~~collision detection~~ _(untested)_
-    - ~~inertia~~
-* Handling of fps drop 
+* Fix collision detection to be less strict
 * Better input testing (for multiple options) / input configuration
